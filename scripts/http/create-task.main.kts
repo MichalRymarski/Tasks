@@ -11,35 +11,42 @@ import org.springframework.web.client.body
 
 val baseUrl = "http://localhost:8080"
 val client = RestClient.create(baseUrl) ?: throw IllegalStateException("Failed to create RestClient")
-var response = client.post()
+
+// POST - no body, returns 201 with no content
+val postResponse = client.post()
     .uri("/task")
     .retrieve()
-    .body<String>()
+    .toBodilessEntity()
+println("Response on post: ${postResponse.statusCode}")
 
-println("Response on post: $response")
-
-var listResponse = client.get()
+// GET all - returns List<TaskDto> as JSON
+val listResponse = client.get()
     .uri("/task")
     .retrieve()
-    .body<List<String>>()
+    .body<List<Map<String, Any>>>()
 println("Response on get all: $listResponse")
 
-response = client.get()
+// GET by id - returns TaskDto as JSON
+val getResponse = client.get()
     .uri("/task/1")
     .retrieve()
-    .body<String>()
-println("Response on get by id: $response")
+    .body<Map<String, Any>>()
+println("Response on get by id: $getResponse")
 
-response = client.put()
+// PUT - body is a TaskStatus enum value, returns TaskDto
+val putResponse = client.put()
     .uri("/task/1")
-    .body("Updated Task 1")
+    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+    .body("\"DONE\"")
     .retrieve()
-    .body<String>()
-println("Response on put: $response")
+    .body<Map<String, Any>>()
+println("Response on put: $putResponse")
 
-response = client.patch()
+// PATCH - body is a TaskStatus enum value, returns TaskDto
+val patchResponse = client.patch()
     .uri("/task/1")
-    .body("Completed")
+    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+    .body("\"TODO\"")
     .retrieve()
-    .body<String>()
-println("Response on patch: $response")
+    .body<Map<String, Any>>()
+println("Response on patch: $patchResponse")
