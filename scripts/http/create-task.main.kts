@@ -22,7 +22,7 @@ try {
         .post()
         .uri("/task")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-        .body(TaskDto(description = "test"))
+        .body(TaskDto(title = "test1", description = "test"))
         .retrieve()
         .toBodilessEntity()
     println("Response on post: ${postResponse.statusCode} with body ${postResponse.body}")

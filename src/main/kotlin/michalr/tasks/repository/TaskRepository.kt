@@ -4,6 +4,8 @@ import org.springframework.stereotype.Repository
 import io.github.oshai.kotlinlogging.KotlinLogging
 import michalr.tasks.data.Task
 import michalr.tasks.data.TaskStatus
+import michalr.tasks.exception.TaskAlreadyExistsException
+import michalr.tasks.util.ifTrueThrow
 import org.springframework.data.jpa.repository.JpaRepository
 
 @Repository
@@ -25,5 +27,12 @@ interface TaskRepository : JpaRepository<Task, Int> {
         foundTask.status = status
 
         return save(foundTask)
+    }
+
+    fun existsByTitle(title: String): Boolean
+
+    fun createNewTask(newTask: Task){
+        existsByTitle(newTask.title).ifTrueThrow { TaskAlreadyExistsException("Task with title ${newTask.title} already exists") }
+        save(newTask)
     }
 }
