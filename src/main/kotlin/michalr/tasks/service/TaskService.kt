@@ -25,12 +25,8 @@ class TaskService(val taskRepository: TaskRepository) {
         return task
     }
 
-    fun createNewTask(){
+    fun createNewTask(newTask: Task) {
         log.info { "Creating a new task in the service layer" }
-        val newTask = Task().apply {
-            title = "New Task"
-            description = "This is a new task"
-        }
         taskRepository.save(newTask)
     }
 

@@ -1,8 +1,7 @@
 package michalr.tasks.data
 
 import jakarta.persistence.*
-import michalr.tasks.dto.TaskDto
-import java.util.*
+import michalr.tasks.dto.TaskFrontendDto
 
 @Entity
 @Table(name = "task")
@@ -22,8 +21,8 @@ class Task {
     @Enumerated(EnumType.ORDINAL)
     var status: TaskStatus = TaskStatus.TODO
 
-    fun toDto(): TaskDto {
-        return TaskDto(
+    fun toDto(): TaskFrontendDto {
+        return TaskFrontendDto(
             title = this.title,
             description = this.description,
             status = this.status

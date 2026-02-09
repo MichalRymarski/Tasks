@@ -27,6 +27,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     //runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
@@ -54,3 +55,5 @@ allOpen {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+

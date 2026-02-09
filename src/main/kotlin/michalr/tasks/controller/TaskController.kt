@@ -2,12 +2,11 @@ package michalr.tasks.controller
 
 import org.springframework.web.bind.annotation.RestController
 import io.github.oshai.kotlinlogging.KotlinLogging
-import michalr.tasks.data.Task
+import jakarta.validation.Valid
 import michalr.tasks.data.TaskStatus
-import michalr.tasks.dto.TaskDto
+import michalr.tasks.dto.TaskFrontendDto
 import michalr.tasks.service.TaskService
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -26,7 +25,7 @@ class TaskController(
     private val log = KotlinLogging.logger {}
 
     @GetMapping
-    fun getAllTasks(): ResponseEntity<List<TaskDto>> {
+    fun getAllTasks(): ResponseEntity<List<TaskFrontendDto>> {
         log.info { "Received request to get all tasks" }
         val tasks = taskService.getAllTasks().map { task -> task.toDto() }
 
@@ -34,7 +33,7 @@ class TaskController(
     }
 
     @GetMapping("/{id}")
-    fun getTaskById(@PathVariable id: Int): ResponseEntity<TaskDto> {
+    fun getTaskById(@PathVariable id: Int): ResponseEntity<TaskFrontendDto> {
         log.info { "Received request to get task with id: $id" }
         val task = taskService.getTaskById(id).toDto()
 
@@ -42,9 +41,9 @@ class TaskController(
     }
 
     @PostMapping
-    fun createTask(): ResponseEntity<Void> {
+    fun createTask(@RequestBody  @Valid taskDto : TaskFrontendDto): ResponseEntity<Void> {
         log.info { "Received request to create a new task" }
-        taskService.createNewTask()
+        taskService.createNewTask(taskDto.toTask())
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -52,15 +51,15 @@ class TaskController(
     }
 
     @PutMapping("/{id}")
-    fun updateTask(@PathVariable id: Int, @RequestBody status: TaskStatus): ResponseEntity<TaskDto> {
-        log.info { "Received request to update task with id: $id  with $status" }
-        val updatedTask = taskService.changeTaskStatus(id, status).toDto()
+    fun updateTask(@PathVariable id: Int, @RequestBody @Valid taskDto: TaskFrontendDto): ResponseEntity<TaskFrontendDto> {
+        log.info { "Received request to update task with id: $id  with $taskDto" }
+        val updatedTask = taskService.updateTask(id, taskDto.toTask()).toDto()
 
         return ResponseEntity.ok(updatedTask)
     }
 
     @PatchMapping("/{id}")
-    fun changeTaskStatus(@PathVariable id: Int, @RequestBody status: TaskStatus): ResponseEntity<TaskDto> {
+    fun changeTaskStatus(@PathVariable id: Int, @RequestBody status: TaskStatus): ResponseEntity<TaskFrontendDto> {
         log.info { "Received request to partially update status with id: $id  with $status" }
         val updatedStatusTask = taskService.changeTaskStatus(id, status).toDto()
 

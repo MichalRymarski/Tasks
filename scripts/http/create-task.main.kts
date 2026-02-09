@@ -13,11 +13,23 @@ val baseUrl = "http://localhost:8080"
 val client = RestClient.create(baseUrl) ?: throw IllegalStateException("Failed to create RestClient")
 
 // POST - no body, returns 201 with no content
-val postResponse = client.post()
-    .uri("/task")
-    .retrieve()
-    .toBodilessEntity()
-println("Response on post: ${postResponse.statusCode}")
+data class TaskDto(
+    val title: String? = null,
+    val description: String ? = null,
+)
+try {
+    val postResponse = client
+        .post()
+        .uri("/task")
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .body(TaskDto(description = "test"))
+        .retrieve()
+        .toBodilessEntity()
+    println("Response on post: ${postResponse.statusCode} with body ${postResponse.body}")
+} catch (e: org.springframework.web.client.HttpClientErrorException) {
+    println("Error status: ${e.statusCode}")
+    println("Error body: ${e.responseBodyAsString}")  // This will show you what's actually returned
+}
 
 // GET all - returns List<TaskDto> as JSON
 val listResponse = client.get()
@@ -37,9 +49,9 @@ println("Response on get by id: $getResponse")
 val putResponse = client.put()
     .uri("/task/1")
     .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-    .body("\"DONE\"")
+    .body(TaskDto(title = "asd", description = "test"))
     .retrieve()
-    .body<Map<String, Any>>()
+    .toBodilessEntity()
 println("Response on put: $putResponse")
 
 // PATCH - body is a TaskStatus enum value, returns TaskDto
