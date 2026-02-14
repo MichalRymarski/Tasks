@@ -28,6 +28,8 @@ dependencies {
     implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    testImplementation("org.springframework.security:spring-security-test")
     //runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
