@@ -1,4 +1,4 @@
-package michalr.tasks.exception
+package michalr.tasks.exception.custom
 
 class TaskAlreadyExistsException : RuntimeException {
     constructor(message: String) : super(message)
@@ -7,3 +7,4 @@ class TaskAlreadyExistsException : RuntimeException {
 
     constructor(cause: Throwable) : super(cause)
 }
+

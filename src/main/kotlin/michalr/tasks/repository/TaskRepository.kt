@@ -1,10 +1,9 @@
 package michalr.tasks.repository
 
 import org.springframework.stereotype.Repository
-import io.github.oshai.kotlinlogging.KotlinLogging
 import michalr.tasks.data.Task
 import michalr.tasks.data.TaskStatus
-import michalr.tasks.exception.TaskAlreadyExistsException
+import michalr.tasks.exception.custom.TaskAlreadyExistsException
 import michalr.tasks.util.ifTrueThrow
 import org.springframework.data.jpa.repository.JpaRepository
 

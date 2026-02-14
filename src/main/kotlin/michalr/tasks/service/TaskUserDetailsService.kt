@@ -1,20 +1,17 @@
-package michalr.tasks.config
+package michalr.tasks.service
 
-import org.springframework.stereotype.Service
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.transaction.Transactional
 import michalr.tasks.data.role.Privilege
 import michalr.tasks.data.role.Role
-import michalr.tasks.repository.RoleRepository
 import michalr.tasks.repository.UserRepository
-import org.springframework.context.MessageSource
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.stereotype.Service
 
 @Service("userDetailsService")
 @Transactional
@@ -23,7 +20,7 @@ class TaskUserDetailsService(
 ) : UserDetailsService {
     private val log = KotlinLogging.logger {}
 
-    override fun loadUserByUsername(email: String): UserDetails? {
+    override fun loadUserByUsername(email: String): UserDetails {
         val user = userRepository.findByEmail(email) ?: throw UsernameNotFoundException("User not found with email: $email") //todo : add to controller advice on login
         log.info { "Found User with email: $email" }
 

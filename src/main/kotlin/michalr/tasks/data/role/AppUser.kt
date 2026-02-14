@@ -3,8 +3,8 @@ package michalr.tasks.data.role
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "user")
-class TaskUser {
+@Table(name = "app_user")
+class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -22,8 +22,8 @@ class TaskUser {
 
     @ManyToMany
     @JoinTable(
-        name = "user_role",
-        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+        name = "app_user_role",
+        joinColumns = [JoinColumn(name = "app_user_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
     )
     var roles : MutableSet<Role> = mutableSetOf()

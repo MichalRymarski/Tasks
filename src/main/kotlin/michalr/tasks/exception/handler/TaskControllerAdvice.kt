@@ -1,12 +1,14 @@
-package michalr.tasks.exception
+package michalr.tasks.exception.handler
 
+import michalr.tasks.controller.TaskController
+import michalr.tasks.exception.custom.TaskAlreadyExistsException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
-@ControllerAdvice
+@ControllerAdvice(assignableTypes = [TaskController::class])
 class TaskControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleValidationErrors(exception: MethodArgumentNotValidException): ResponseEntity<Map<String, Any?>> {
@@ -36,15 +38,6 @@ class TaskControllerAdvice {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
             mapOf(
                 "message" to exception.message.orEmpty()
-            )
-        )
-    }
-
-    @ExceptionHandler(Exception::class)
-    fun handleGenericException(exception: Exception): ResponseEntity<Map<String, String>> {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-            mapOf(
-                "message" to "An unexpected error occurred: ${exception.message}"
             )
         )
     }

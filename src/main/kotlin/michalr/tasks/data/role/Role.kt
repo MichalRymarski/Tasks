@@ -12,7 +12,7 @@ class Role {
 
     var name: String = ""
     @ManyToMany(mappedBy = "roles")
-    var users: MutableSet<TaskUser> = mutableSetOf()
+    var users: MutableSet<AppUser> = mutableSetOf()
 
     @ManyToMany
     @JoinTable(

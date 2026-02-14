@@ -4,7 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.transaction.Transactional
 import michalr.tasks.data.role.Privilege
 import michalr.tasks.data.role.Role
-import michalr.tasks.data.role.TaskUser
+import michalr.tasks.data.role.AppUser
 import michalr.tasks.repository.PrivilegeRepository
 import michalr.tasks.repository.RoleRepository
 import michalr.tasks.repository.UserRepository
@@ -25,7 +25,7 @@ class SetupDataLoader(
     private val log = KotlinLogging.logger {}
 
     @Transactional
-    override fun onApplicationEvent(event: ContextRefreshedEvent?) {
+    override fun onApplicationEvent(event: ContextRefreshedEvent) {
         if (alreadySetup) return
 
         val readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE")
@@ -69,7 +69,7 @@ class SetupDataLoader(
 
     private fun setupAdmin() {
         val adminRole = roleRepository.findByName("ROLE_ADMIN")
-        val user = TaskUser().apply {
+        val user = AppUser().apply {
             firstName = "Test"
             lastName = "Test"
             password = passwordEncoder.encodeValidated("test")
