@@ -14,7 +14,7 @@ class Task {
     @Column(name = "title", nullable = false, unique = true)
     var title: String = ""
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true, columnDefinition = "TEXT")
     var description: String = ""
 
     @Column(name = "status", nullable = false)
