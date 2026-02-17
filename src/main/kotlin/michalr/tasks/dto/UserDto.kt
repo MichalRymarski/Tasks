@@ -48,7 +48,7 @@ data class UserRegistrationDomainDto(
         lastName = this.lastName
         email = this.email
         password = passwordEncoder.encodeValidated(this.password)
-        enabled = false
+        enabled = true
         tokenExpired = false
         roles = mutableSetOf(roleRepository.findByName("ROLE_USER")!!)
     }

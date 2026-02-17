@@ -14,7 +14,7 @@ class Role {
     @ManyToMany(mappedBy = "roles")
     var users: MutableSet<AppUser> = mutableSetOf()
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "role_privilege",
         joinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")],

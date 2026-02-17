@@ -20,7 +20,7 @@ class AppUser {
     var enabled = false
     var tokenExpired = false
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "app_user_role",
         joinColumns = [JoinColumn(name = "app_user_id", referencedColumnName = "id")],

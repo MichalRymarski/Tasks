@@ -8,7 +8,11 @@ import michalr.tasks.dto.UserRegistrationDomainDto
 import michalr.tasks.exception.custom.UserAlreadyExistsException
 import michalr.tasks.repository.RoleRepository
 import michalr.tasks.repository.UserRepository
+import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @Service
@@ -16,7 +20,7 @@ class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val roleRepository: RoleRepository,
-    private val taskUserDetailsService: TaskUserDetailsService
+    private val authenticationManager: AuthenticationManager
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -33,9 +37,18 @@ class UserService(
 
 
     fun loginSystemUser(userDto: UserLoginDomainDto) {
-        val userDetails = taskUserDetailsService.loadUserByUsername(userDto.email)
+         try {
+            val authentication = authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    userDto.email,
+                    userDto.password
+                )
+            )
 
-        if (!passwordEncoder.matches(userDto.password, userDetails.password)) {
+            SecurityContextHolder.getContext().authentication = authentication
+            log.info { "User ${userDto.email} logged in successfully" }
+        } catch (e: BadCredentialsException) {
+            log.warn { "Failed login attempt for user: ${userDto.email} pass : ${userDto.password}. Cause: ${e.message}" }
             throw BadCredentialsException("Invalid email or password")
         }
     }

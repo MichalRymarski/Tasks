@@ -7,6 +7,7 @@ import michalr.tasks.dto.UserRegistrationFrontendDto
 import michalr.tasks.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -29,7 +30,7 @@ class UserController(
 
     @PostMapping("/login")
     fun loginUser(@RequestBody loginDto: UserLoginFrontendDto): ResponseEntity<String> {
-        log.info { "Received request to login a user" }
+        log.info { "Received request to login a user with email ${loginDto.email} and password ${loginDto.password}" }
         userService.loginSystemUser(loginDto.toDomain())
 
         return ResponseEntity.ok().build()
