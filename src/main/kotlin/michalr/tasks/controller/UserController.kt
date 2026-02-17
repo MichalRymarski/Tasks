@@ -2,6 +2,7 @@ package michalr.tasks.controller
 
 import org.springframework.web.bind.annotation.RestController
 import io.github.oshai.kotlinlogging.KotlinLogging
+import jakarta.validation.Valid
 import michalr.tasks.dto.UserLoginFrontendDto
 import michalr.tasks.dto.UserRegistrationFrontendDto
 import michalr.tasks.service.UserService
@@ -21,7 +22,7 @@ class UserController(
     private val log = KotlinLogging.logger {}
 
     @PostMapping("/register")
-    fun registerUser(@RequestBody registrationDto: UserRegistrationFrontendDto): ResponseEntity<String> {
+    fun registerUser(@RequestBody @Valid registrationDto: UserRegistrationFrontendDto): ResponseEntity<String> {
         log.info { "Received request to register a new user" }
         userService.registerSystemUser(registrationDto.toDomain())
 
@@ -29,7 +30,7 @@ class UserController(
     }
 
     @PostMapping("/login")
-    fun loginUser(@RequestBody loginDto: UserLoginFrontendDto): ResponseEntity<String> {
+    fun loginUser(@RequestBody @Valid loginDto: UserLoginFrontendDto): ResponseEntity<String> {
         log.info { "Received request to login a user with email ${loginDto.email} and password ${loginDto.password}" }
         userService.loginSystemUser(loginDto.toDomain())
 

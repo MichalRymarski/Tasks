@@ -13,7 +13,7 @@ class PasswordEncoderProvider {
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder(16)
+        return BCryptPasswordEncoder(10)
     }
 
 }

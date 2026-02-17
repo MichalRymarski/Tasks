@@ -43,14 +43,17 @@ data class UserRegistrationDomainDto(
     val email: String,
     val password: String
 ) {
-    fun toSystemUser(passwordEncoder : PasswordEncoder, roleRepository: RoleRepository): AppUser = AppUser().apply {
-        firstName = this.firstName
-        lastName = this.lastName
-        email = this.email
-        password = passwordEncoder.encodeValidated(this.password)
-        enabled = true
-        tokenExpired = false
-        roles = mutableSetOf(roleRepository.findByName("ROLE_USER")!!)
+    fun toSystemUser(passwordEncoder: PasswordEncoder, roleRepository: RoleRepository): AppUser {
+        val dto = this
+        return AppUser().apply {
+            firstName = dto.firstName
+            lastName = dto.lastName
+            email = dto.email
+            password = passwordEncoder.encodeValidated(dto.password)
+            enabled = true
+            tokenExpired = false
+            roles = mutableSetOf(roleRepository.findByName("ROLE_USER")!!)
+        }
     }
 }
 

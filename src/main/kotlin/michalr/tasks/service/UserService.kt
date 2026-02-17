@@ -29,9 +29,7 @@ class UserService(
         if (userRepository.findByEmail(registrationDto.email) != null) {
             throw UserAlreadyExistsException("User with email ${registrationDto.email} already exists")
         }
-
         val user = registrationDto.toSystemUser(passwordEncoder,roleRepository)
-
         return userRepository.save(user)
     }
 
